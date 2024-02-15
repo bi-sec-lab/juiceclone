@@ -190,7 +190,6 @@ jobs:
           browser: ${{ matrix.browser }}
           start: npm start
           wait-on: http://localhost:3000
-          record: true
           group: ${{ matrix.browser }} @ ${{ matrix.os }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
