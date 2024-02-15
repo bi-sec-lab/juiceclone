@@ -19,7 +19,7 @@ module.exports = {
   parserOptions: {
     parser: '@typescript-eslint/parser',
     ecmaVersion: 2018,
-    project: ['./tsconfig.json', './tsconfig.node.json'],
+    project: ['./tsconfig.json'],
     tsconfigRootDir: __dirname,
   },
   ignorePatterns: [
