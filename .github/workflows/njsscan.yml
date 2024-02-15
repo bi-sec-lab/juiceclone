@@ -1,5 +1,7 @@
 on: [push] 
- 
+
+name: njsscan
+
 jobs:
   njsscan:
     runs-on: ubuntu-latest
