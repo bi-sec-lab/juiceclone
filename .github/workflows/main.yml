@@ -1,4 +1,4 @@
-on: [pull_request] 
+on: [push] 
  
 jobs:
   depchecktest:
@@ -17,7 +17,6 @@ jobs:
         with:
            name: Depcheck report
            path: ${{github.workspace}}/reports
-           
 
   njsscan:
     runs-on: ubuntu-latest
