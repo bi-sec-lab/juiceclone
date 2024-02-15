@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: DevSkim
+name: Security Scan with DevSkim
 
 on:
   push:
