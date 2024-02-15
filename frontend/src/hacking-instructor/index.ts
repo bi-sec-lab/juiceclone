@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021 Bjoern Kimminich.
+ * Copyright (c) 2014-2023 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
  */
 
@@ -16,6 +16,7 @@ import { PasswordStrengthInstruction } from './challenges/passwordStrength'
 import { BonusPayloadInstruction } from './challenges/bonusPayload'
 import { LoginBenderInstruction } from './challenges/loginBender'
 import { TutorialUnavailableInstruction } from './tutorialUnavailable'
+import { CodingChallengesInstruction } from './challenges/codingChallenges'
 
 const challengeInstructions: ChallengeInstruction[] = [
   ScoreBoardInstruction,
@@ -27,7 +28,8 @@ const challengeInstructions: ChallengeInstruction[] = [
   ForgedFeedbackInstruction,
   PasswordStrengthInstruction,
   BonusPayloadInstruction,
-  LoginBenderInstruction
+  LoginBenderInstruction,
+  CodingChallengesInstruction
 ]
 
 export interface ChallengeInstruction {
@@ -68,6 +70,9 @@ function loadHint (hint: ChallengeHint): HTMLElement {
     return null as unknown as HTMLElement
   }
 
+  const wrapper = document.createElement('div')
+  wrapper.style.position = 'absolute'
+
   const elem = document.createElement('div')
   elem.id = 'hacking-instructor'
   elem.style.position = 'absolute'
@@ -80,8 +85,10 @@ function loadHint (hint: ChallengeHint): HTMLElement {
   elem.style.whiteSpace = 'initial'
   elem.style.lineHeight = '1.3'
   elem.style.top = '24px'
+  elem.style.fontFamily = 'Roboto,Helvetica Neue,sans-serif'
   if (!hint.unskippable) {
     elem.style.cursor = 'pointer'
+    elem.title = 'Double-click to skip'
   }
   elem.style.fontSize = '14px'
   elem.style.display = 'flex'
@@ -111,6 +118,7 @@ function loadHint (hint: ChallengeHint): HTMLElement {
   cancelButton.style.position = 'relative'
   cancelButton.style.zIndex = '20001'
   cancelButton.style.bottom = '-22px'
+  cancelButton.style.cursor = 'pointer'
 
   elem.appendChild(picture)
   elem.appendChild(textBox)
@@ -121,19 +129,21 @@ function loadHint (hint: ChallengeHint): HTMLElement {
   relAnchor.appendChild(elem)
   relAnchor.appendChild(cancelButton)
 
+  wrapper.appendChild(relAnchor)
+
   if (hint.fixtureAfter) {
     // insertAfter does not exist so we simulate it this way
-    target.parentElement.insertBefore(relAnchor, target.nextSibling)
+    target.parentElement.insertBefore(wrapper, target.nextSibling)
   } else {
-    target.parentElement.insertBefore(relAnchor, target)
+    target.parentElement.insertBefore(wrapper, target)
   }
 
-  return relAnchor
+  return wrapper
 }
 
-async function waitForClick (element: HTMLElement) {
+async function waitForDoubleClick (element: HTMLElement) {
   return await new Promise((resolve) => {
-    element.addEventListener('click', resolve)
+    element.addEventListener('dblclick', resolve)
   })
 }
 
@@ -145,11 +155,11 @@ async function waitForCancel (element: HTMLElement) {
   })
 }
 
-export function hasInstructions (challengeName: String): boolean {
+export function hasInstructions (challengeName: string): boolean {
   return challengeInstructions.find(({ name }) => name === challengeName) !== undefined
 }
 
-export async function startHackingInstructorFor (challengeName: String): Promise<void> {
+export async function startHackingInstructorFor (challengeName: string): Promise<void> {
   const challengeInstruction = challengeInstructions.find(({ name }) => name === challengeName) || TutorialUnavailableInstruction
 
   for (const hint of challengeInstruction.hints) {
@@ -160,12 +170,12 @@ export async function startHackingInstructorFor (challengeName: String): Promise
     }
     element.scrollIntoView()
 
-    const continueConditions: Array<Promise<void | {}>> = [
+    const continueConditions: Array<Promise<void | unknown>> = [
       hint.resolved()
     ]
 
     if (!hint.unskippable) {
-      continueConditions.push(waitForClick(element))
+      continueConditions.push(waitForDoubleClick(element))
     }
     continueConditions.push(waitForCancel(document.getElementById('cancelButton')))
 
