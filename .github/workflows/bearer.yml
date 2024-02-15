@@ -20,6 +20,6 @@ jobs:
           output: results.sarif
       - name: Upload SARIF file
         if: always()
-        uses: github/codeql-action/upload-sarif@vv
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: results.sarif
