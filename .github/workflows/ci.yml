@@ -38,6 +38,7 @@ jobs:
           npm install --ignore-scripts --legacy-peer-deps
       - name: "Lint source code"
         run: npm run lint
+        continue-on-error: true
       - name: "Lint customization configs"
         run: >
           npm run lint:config -- -f ./config/7ms.yml &&

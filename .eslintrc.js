@@ -17,8 +17,10 @@ module.exports = {
     SharedArrayBuffer: 'readonly'
   },
   parserOptions: {
+    parser: '@typescript-eslint/parser',
     ecmaVersion: 2018,
-    project: './tsconfig.json'
+    project: ['./tsconfig.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
   },
   ignorePatterns: [
     '.eslintrc.js',
