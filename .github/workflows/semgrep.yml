@@ -21,7 +21,7 @@ jobs:
           run: |
             semgrep \
               --sarif --output report.sarif \
-              --metrics=off \
+              --metrics auto \
               --config="p/default" \
               --config="p/typescript" \
               --config="p/python" \
