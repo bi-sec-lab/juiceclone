@@ -22,7 +22,12 @@ jobs:
             semgrep \
               --sarif --output report.sarif \
               --metrics=off \
-              --config="p/default"
+              --config="p/default" \
+              --config="p/typescript" \
+              --config="p/python" \
+              --config="p/javascript" \
+              --config "p/owasp-top-ten" \
+              --config "p/cwe-top-25"
 
         - name: save report as pipeline artifact
           uses: actions/upload-artifact@v3
