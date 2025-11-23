@@ -5,42 +5,35 @@ on:
     branches:
       - master
   schedule:
-    - cron:  '0 1 * * 6'
+    # Run once a week, on Saturday at 01:00 UTC
+    - cron: '0 1 * * 6'
 
 jobs:
   semgrep-full:
-      runs-on: ubuntu-latest
-      container:
-        image: returntocorp/semgrep
-
-      steps:
-        - name: clone application source code
-          uses: actions/checkout@v3
-          
-        - name: full scan
-          run: |
-            semgrep \
-              --sarif --output report.sarif \
-              --metrics auto \
-              --config="p/default" \
-              --config="p/typescript" \
-              --config="p/python" \
-              --config="p/javascript" \
-              --config "p/owasp-top-ten" \
-              --config "p/cwe-top-25"
-
-        - name: save report as pipeline artifact
-          uses: actions/upload-artifact@v3
-          with:
-            name: semgrep_result.sarif
-            path: report.sarif
+    # Use the latest available GitHub runner image
+    runs-on: ubuntu-latest
+    
+    # Use the official Semgrep action instead of a container
+    steps:
+      - name: Checkout application source code
+        # actions/checkout@v4 is the latest major version
+        uses: actions/checkout@v4
+        
+      # Use the official Semgrep GitHub Action for scanning
+      - name: Run Semgrep
+        uses: semgrep/semgrep-action@v1 # v1 is the latest stable major version
+        with:
+          config: |
+            p/default
+            p/typescript
+            p/python
+            p/javascript
+            p/owasp-top-ten
+            p/cwe-top-25
             
-        - name: Download report
-          uses: actions/download-artifact@v2
-          with: 
-            name: semgrep_result.sarif
-
-        - name: Upload SARIF file
-          uses: github/codeql-action/upload-sarif@v3
-          with:
-            sarif_file: report.sarif
+      - name: Save report as pipeline artifact
+        uses: actions/upload-artifact@v4
+        if: always() # Upload even if scan fails, as report.sarif might contain findings
+        with:
+          name: semgrep_result.sarif
+          path: semgrep.sarif # Semgrep Action outputs to semgrep.sarif by default
