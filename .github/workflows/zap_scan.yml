@@ -1,6 +1,7 @@
-name: "ZAP Baseline Scan - Local Checkout"
+name: "ZAP Baseline Scan"
 
 on:
+  workflow_dispatch:
   schedule:
     # Runs once a week, on Saturday at 18:00 UTC
     - cron: '0 18 * * 6'
