@@ -23,7 +23,6 @@ jobs:
           
       - name: Install dependencies and start Juice Shop
         run: |
-          cd juice-shop
           # Install dependencies
           npm install
           # Start the server and run it in the background (&) 
