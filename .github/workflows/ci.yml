@@ -92,27 +92,6 @@ jobs:
           path: |
             api-lcov.info
 
-  coverage-report:
-    needs: [test, api-test]
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    steps:
-      - name: "Check out Git repository"
-        uses: actions/checkout@v6
-      - name: "Download unit test coverage data"
-        uses: actions/download-artifact@v5
-        with:
-          name: unit-test-lcov
-      - name: "Download API test coverage data"
-        uses: actions/download-artifact@v5
-        with:
-          name: api-test-lcov
-      - name: "Publish coverage to Coveralls"
-        uses: coverallsapp/github-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          files: frontend-lcov.info server-lcov.info api-lcov.info
-
   custom-config-test:
     runs-on: ubuntu-latest
     steps:
