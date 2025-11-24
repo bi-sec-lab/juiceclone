@@ -10,6 +10,9 @@ on:
 jobs:
   semgrep-full:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
 
     # Run all steps within the Semgrep container image
     container:
