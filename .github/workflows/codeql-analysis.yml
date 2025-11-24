@@ -19,12 +19,13 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
       with:
-        language: 'javascript-typescript'
+        languages: 'javascript-typescript'
         queries: security-extended
         config: |
           paths-ignore:
             - 'data/static/codefixes'
             
+
     - name: Autobuild
       uses: github/codeql-action/autobuild@v4
     - name: Perform CodeQL Analysis
