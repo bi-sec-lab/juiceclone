@@ -40,7 +40,7 @@ jobs:
           interval: 500
 
       - name: ZAP Baseline Scan
-        uses: zaproxy/action-baseline@v0.16.0
+        uses: zaproxy/action-baseline@v0.15.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           # Target the local instance running on port 3000
