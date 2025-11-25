@@ -1,6 +1,8 @@
 # Dependency Review Action
 name: 'Dependency review'
 on:
+  push:
+    branches: [ "master", "main" ]
   pull_request:
     branches: [ "master", "main" ]
 permissions:
